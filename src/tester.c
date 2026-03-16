@@ -38,12 +38,16 @@ double process_file(int n_data, int file_no, short*buffer){
     fread(buffer, sizeof(short), n_data, fp);
 
 
-    clock_t start = clock();
-    //put sorting function here
     for (int i=0; i<n_data; i++){
         printf("%d\n", buffer[i]);
     }
+    clock_t start = clock();
+    //put sorting function here
+    selectionsort(buffer, n_data);
     clock_t end = clock();
+    for (int i=0; i<n_data; i++){
+        printf("%d\n", buffer[i]);
+    }
 
     fclose(fp);
     return (double) (end - start) / CLOCKS_PER_SEC;
