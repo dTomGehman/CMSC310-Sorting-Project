@@ -32,7 +32,7 @@ int main(int argc, char**argv){
             fprintf(stderr, "couldn't open file\n");
             exit(1);
         }
-        fprintf(fp, "%d\n", n_data);
+//        fprintf(fp, "%d\n", n_data);
 
         int ct = 0;
         for (int i = 0; i < n_data / BUFFSIZE; i++) {
