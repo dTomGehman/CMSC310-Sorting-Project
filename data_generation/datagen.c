@@ -37,12 +37,13 @@ int main(int argc, char**argv){
         int ct = 0;
         for (int i = 0; i < n_data / BUFFSIZE; i++) {
             for (int j=0; j < BUFFSIZE; j++) {
-                buffer[i%BUFFSIZE] = ((unsigned short) rand()) % maxdatum;
+                buffer[j%BUFFSIZE] = ((unsigned short) rand()) % maxdatum;
             }
             fwrite(buffer, sizeof(short), BUFFSIZE, fp);
         }
         for (int j=0; j< n_data % BUFFSIZE; j++){
             buffer[j] = ((unsigned short) rand()) % maxdatum;
+//            printf("%d ", buffer[j]);
         }
         fwrite(buffer, sizeof(short), n_data % BUFFSIZE, fp);
 

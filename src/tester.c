@@ -10,10 +10,11 @@ double process_file(int n_data, int n_files, short*buffer);
 int main(int argc, char**argv){
     short *buffer;
 
-    int nos_data[] = {5, 10000, 100000, 1000000};
-    for (int index = 0; index < 4; index++) {
+    int nos_data[] = {5, 1000, 10000, 100000, 1000000};
+    for (int index = 0; index < 5; index++) {
         int n_data=nos_data[index];
         buffer = malloc(sizeof(short) * n_data);
+        printf("n data %d\n", n_data);
         if (!buffer){ fprintf(stderr, "malloc fail \n"); exit(1);}
 
         double time_taken;
@@ -35,18 +36,26 @@ double process_file(int n_data, int file_no, short*buffer){
     fp = fopen(filename, "r");
     if (!fp) {printf("out of files size %d\n", n_data); return (-1);}
 
-    fread(buffer, sizeof(short), n_data, fp);
+    int pos = 0;
+    for (int i = 0; i < n_data / BUFFREADSIZE; i++) {
+        int done = fread(buffer + pos, sizeof(short), BUFFREADSIZE, fp);
+        pos += BUFFREADSIZE;
+        if (done != BUFFREADSIZE) printf("read %d \n", done);
+    }
+    fread(buffer + pos, sizeof(short), n_data % BUFFREADSIZE, fp);
 
-
+    printf("presorting");
     for (int i=0; i<n_data; i++){
-        printf("%d\n", buffer[i]);
+        printf("%hu ", buffer[i]);
     }
     clock_t start = clock();
     //put sorting function here
     selectionsort(buffer, n_data);
     clock_t end = clock();
+    printf("\n");
+    printf("sorted");
     for (int i=0; i<n_data; i++){
-        printf("%d\n", buffer[i]);
+        printf("%hu ", buffer[i]);
     }
 
     fclose(fp);

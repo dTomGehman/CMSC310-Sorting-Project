@@ -10,7 +10,6 @@ void selectionsort(short*buffer, int n_data){
             if (buffer[j] < buffer[mindex])
                 mindex = j;
         }
-        printf("min: %hi\n", buffer[mindex]);
         temp = buffer[part];
         buffer[part] = buffer[mindex];
         buffer[mindex] = temp;
