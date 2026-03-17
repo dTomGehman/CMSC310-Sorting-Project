@@ -44,19 +44,20 @@ double process_file(int n_data, int file_no, short*buffer){
     }
     fread(buffer + pos, sizeof(short), n_data % BUFFREADSIZE, fp);
 
-    printf("presorting");
-    for (int i=0; i<n_data; i++){
-        printf("%hu ", buffer[i]);
-    }
+    //printf("presorting");
+    //for (int i=0; i<n_data; i++){
+    //    printf("%hu ", buffer[i]);
+    //}
     clock_t start = clock();
     //put sorting function here
-    selectionsort(buffer, n_data);
+    //selectionsort(buffer, n_data);
+    quicksort(buffer, n_data);
     clock_t end = clock();
-    printf("\n");
-    printf("sorted");
-    for (int i=0; i<n_data; i++){
-        printf("%hu ", buffer[i]);
-    }
+    //printf("\n");
+    //printf("sorted");
+    //for (int i=0; i<n_data; i++){
+    //    printf("%hu ", buffer[i]);
+    //}
 
     fclose(fp);
     return (double) (end - start) / CLOCKS_PER_SEC;

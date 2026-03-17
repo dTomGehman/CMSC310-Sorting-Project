@@ -3,16 +3,20 @@
 
 void selectionsort(short*buffer, int n_data){
     int mindex;
-    short temp;
+    int min;
     for (int part=0; part < n_data - 1; part++) {
         mindex = part;
+        min = buffer[mindex];
         for (int j = part + 1; j < n_data; j++) {
-            if (buffer[j] < buffer[mindex])
+            if (buffer[j] < min) {
                 mindex = j;
+                min = buffer[mindex];
+            }
         }
-        temp = buffer[part];
-        buffer[part] = buffer[mindex];
-        buffer[mindex] = temp;
+        if (part != mindex) {
+            buffer[mindex] = buffer[part];
+            buffer[part] = (short) min;
+        }
     }
 }
 
