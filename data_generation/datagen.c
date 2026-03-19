@@ -25,6 +25,8 @@ int main(int argc, char**argv){
     short maxdatum = MAX_DATUM;
     short buffer[BUFFSIZE];
 
+    printf("generating %d unsorted files size %d:  ", n_files, n_data);
+
     for (int fileno=0; fileno<n_files; fileno++){
         sprintf(filename, "uns_%d_%03d.dat", n_data, fileno);
         FILE *fp = fopen(filename, "w");
@@ -50,6 +52,6 @@ int main(int argc, char**argv){
         fclose (fp);
         printf("%d ", fileno);
     }
-    printf("\ndone\n");
+    printf(" done\n");
     return 0;
 }
