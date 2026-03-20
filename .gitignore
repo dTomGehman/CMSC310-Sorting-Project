@@ -4,4 +4,4 @@
 datagen
 tester
 datatrans
-a.out
+*.out

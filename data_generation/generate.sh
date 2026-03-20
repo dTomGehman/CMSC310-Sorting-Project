@@ -4,11 +4,10 @@
 #I used .sh extension instead of shebang because 
 #  I'm working on nixos, so add the shebang if you need
 
-make clean
 make
 
 if [ -d ../data ]; then 
-    rm ../data/*
+    exit
 else
     mkdir ../data
 fi

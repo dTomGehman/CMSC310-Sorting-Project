@@ -12,4 +12,5 @@ clean:
 	if [ -f datagen ]; then rm datagen; fi
 	if [ -f datatrans ]; then rm datatrans; fi
 	if [ -f *.dat ]; then rm *.dat; fi
+	if [ -d ../data ]; then rm -rf ../data; fi
 
