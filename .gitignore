@@ -3,4 +3,5 @@
 *.o
 datagen
 tester
+datatrans
 a.out

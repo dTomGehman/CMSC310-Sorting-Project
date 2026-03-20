@@ -9,6 +9,7 @@ datatrans:  datatrans.c ../src/quicksort.c
 	gcc datatrans.c ../src/quicksort.c -o datatrans
 
 clean:
-	rm datagen datatrans
+	if [ -f datagen ]; then rm datagen; fi
+	if [ -f datatrans ]; then rm datatrans; fi
 	if [ -f *.dat ]; then rm *.dat; fi
 
