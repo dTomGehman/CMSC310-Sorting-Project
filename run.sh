@@ -14,6 +14,8 @@ echo "results to be teed to $outfile"
 
 read -s -n 1 -p "Executables and data generated.  Press any key to start tests."
 
+echo -e "starting $(date)\n" >> $outfile
+
 #mergesort
 # size 10000
 ./src/tester ./data uns 10000 0 29 merge | tee -a $outfile
@@ -36,6 +38,8 @@ echo "">> $outfile
 echo "">> $outfile
 ./src/tester ./data "rev" 1000000 0 29 merge | tee -a $outfile
 echo "">> $outfile
+
+echo -e "mergesort done, starting qsort $(date)\n" >> $outfile
 
 #quicksort
 # size 10000
@@ -64,6 +68,7 @@ echo "">> $outfile
 ./src/tester ./data "rev" 1000000 5 14 quick | tee -a $outfile
 ./src/tester ./data "rev" 1000000 15 29 quick | tee -a $outfile
 echo "">> $outfile
+echo -e "qsort done, starting selection sort $(date)\n" >> $outfile
 
 #selectionsort
 # size 10000
@@ -74,6 +79,7 @@ echo "">> $outfile
 ./src/tester ./data uns 100000 0 29 selection | tee -a $outfile
 ./src/tester ./data sor 100000 0 29 selection | tee -a $outfile
 ./src/tester ./data "rev" 100000 0 29 selection | tee -a $outfile
+echo -e "\nselection sort on 10000, 100000 -size files done, starting next round $(date)\n" >> $outfile
 # size 1000000
 #do this in chunks in case of failure
 ./src/tester ./data uns 1000000 0 4 selection | tee -a $outfile
@@ -100,3 +106,5 @@ echo "">> $outfile
 ./src/tester ./data rev 1000000 25 29 selection | tee -a $outfile
 echo "">> $outfile
 
+echo -e "\nselection sort done $(date)\n" >> $outfile
+echo "all done"
