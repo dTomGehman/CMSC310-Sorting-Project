@@ -6,7 +6,7 @@ For this assignment, I compared quicksort, mergesort, and selection sort on vari
 
 ### Structure of Repository
 
-To compile all executables, generate all data, and run all tests, one script can be run:  `./run.sh`
+To compile all executables, generate all data, and run all tests, one script can be run:  `./run.sh`.  The output will be placed in a randomly-named file matching `\d+.out`.  
 
 The makefile and c code required to generate all of the data is in `./data_generation/`.  `datagen` generates random data, and `datatrans` produces a sorted and reverse sorted file from an unsorted data file.  
 
@@ -26,15 +26,15 @@ The results, including raw results from ./run.sh and my report, can be found in 
 
 To generate your own files, run `make -C ./data_generation` and use `datagen` to create any number of arbitrarily-sized unsorted data files.  E.g., `.data_generation/datagen 3 1000` creates three files, each with 1000 numbers.  `datagen` produces the same output for the same input - a random seed is hard-coded.  
 
-Each unsorted data file name matches `uns_(\d+)_(\d{3}+).dat`, where the first number is the count of data and the second is the file number.  `./datagen 3 1000` would create three files, named `uns_1000_000.dat`, `uns_1000_001.dat`, and  `uns_1000_002.dat`.  
+Each unsorted data file name matches `uns_(\d+)_(\d{3}+)\.dat`, where the first number is the count of data and the second is the file number.  `./datagen 3 1000` would create three files, named `uns_1000_000.dat`, `uns_1000_001.dat`, and  `uns_1000_002.dat`.  
 
 To produce sorted files, pass each file to `datatrans`, which will create a sorted and reverse sorted file with the same data.  E.g., `./data_generation/datatrans uns_1000_001.dat` would produce `sor_1000_001.dat` and `rev_1000_001.dat`.  
 
-`datagen` and `datatrans` create their files in the current working directory.  
+`datagen` and `datatrans` create their files in the current working directory, not `./data/`.  
 
 #### Manual testing
 
-`./src/` contains the code for the `tester` executable.  Run `make -C src`.  Run `./src/tester` to see the syntax.  It's long, but it makes it easy to script batches of tests.  Each call to `tester` runs one sorting algorithm on one file type (unsorted, sorted, reverse) over a range of file numbers.  
+`./src/` contains the code for the `tester` executable.  Run `make -C src`.  Run `./src/tester` to see the syntax.  It's long, but it makes it easy to script batches of tests.  Each call to `tester` runs one sorting algorithm (merge, quick, selection) on one file type (unsorted, sorted, reverse) on one file size (must match existing files) over a range of file numbers.  
 
 Specify the directory of the data file(s) you'd like to sort, the type (uns, sor, rev), the size, the range, and the algorithm.  
 
