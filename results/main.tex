@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{float}
+\usepackage{hyperref}
+
+\title{Comparing Selection Sort, Mergesort, and Quicksort}
+\author{Tom Gehman}
+\date{March 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+In this experiment, I implemented and compared three sorting algorithms, selection sort, mergesort, and quicksort (using fat partitions), on varying sizes of randomly-generated datasets.   The source code and results are available at \newline\href{https://github.com/dTomGehman/CMSC310-Sorting-Project}{https://github.com/dTomGehman/CMSC310-Sorting-Project}.  
+
+\section{Methods}
+The sorting algorithms were implemented in C.  Files of three sizes---small, medium, large---were generated to hold 10000, 100000, and 1000000 short (2-byte) integers respectively, all on the interval $[0,9999]$.  30 unique files of each size were randomly generated (with the same initial seed for reproducibility), and each was also copied into sorted and reverse sorted versions for a total of 270 files of about 200 megabytes.  Each sorting algorithm was tested on each file.  The clock() function in time.h was used to measure the time in milliseconds that the algorithms took---this does not include the time that the program took to read any files or print results.  The tests were run on a laptop with a 12th Gen Intel(R) Core(TM) i5-1235U.  The laptop was plugged in and left on a cooling rack uninterrupted for the duration of the tests.  
+
+\section{Theoretical Efficiency}
+
+In selection sort, the basic operation can be identified as a comparison (\texttt{if (buffer[j] < min)}). This occurs inside two loops, the outer \texttt{for (int part=0; part < n\_data - 1; part++)} and the inner \texttt{for (int j = part + 1; j < n\_data; j++)}.  Thus the number of basic operations performed is $\sum_{i=0}^{n-2} (n-1-i) = \frac{n(n-1)}{2}$, a time complexity of $\Theta(n^2)$.  
+
+Mergesort also has a basic operation of comparison \texttt{if (left[l] < right[r])}.  This occurs inside a while loop inside a recursive call.  The while loop runs a maximum of $n-1$ times: $L_{worst}(n) = n-1$.  The recursive call is made twice until $n$ reaches 1, leaving a recurrence relation of $C(n) = 2*C(n/2) + L_{worst}(n) = 2*C(n/2)+n-1; C(1)=0$.  Substituting $2k$ for $n$, we can obtain $C(2^k) = 2^kC(0)+k*2^k - (2^k-1) = k2^k-2^k+1 = n\log n - n + 1$.  The worst case is then $\Theta(n\log n)$.  
+
+Quicksort is more unusual because I utilized a median-of-three partition on subarrays of sizes greater than 101 but only partitioned based on the first item of the subarray otherwise.  This means that for random data, the partition is an imperfect approximation of the middle of the distribution, but for sorted and reversed data, the partition is always in the middle (best case) until the array gets small enough; then it becomes the first---either the smallest or largest item (worst case).  As our inputs are much greater than 100, we can still treat the algorithm as $\Theta (n\log n)$.  
+It also uses a three-way (Dutch flag) partitioning scheme, so in the innermost loop, sometimes one comparison is made (when an item is less than the partition); other times two are made (when an item is greater than or equal to the partition).  It should make slightly more than 1.5 comparisons on average when the subarray is large.  However, when the subarray shrinks below 101, on sorted data, it always makes 2 comparisons, and on reverse data, it makes slightly more than 1 on average.  
+
+
+\section{Data}
+
+Table \ref{summary} describes the test results.  The average and standard deviation of the times taken to complete each of 30 tests are recorded for 27 categories.   
+
+\begin{table}[H]
+  \begin{center}
+    \caption{Results Summary (values in milliseconds)}
+    \label{summary}
+    \resizebox{\textwidth}{!}{\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r}
+       \multicolumn{2}{r}{File size $\rightarrow$} & \multicolumn{3}{|c}{small} &  \multicolumn{3}{|c}{medium} &  \multicolumn{3}{|c}{large} \\
+       \hline
+       Algorithm $\downarrow$ & Arrangment $\rightarrow$ & unsorted & sorted & reverse & unsorted & sorted & reverse & unsorted & sorted & reverse \\
+       \hline
+      Quicksort & average & 0.832 & 1.348 & 1.040 & 8.175 & 36.969 & 27.503 & 80.787 & 1020.268 & 654.371 \\
+       & stdev & 0.044 & 0.059 & 0.043 & 0.126 & 1.681 & 0.645 & 1.332 & 23.906 & 7.155 \\
+       \hline
+      Mergesort & average & 1.676 & 0.755 & 0.657 & 15.263 & 7.092 & 6.343 & 171.819 & 84.803 & 80.982 \\
+       & stdev & 0.662 & 0.185 & 0.041 & 0.540 & 0.410 & 0.242 & 10.628 & 8.825 & 6.739 \\
+       \hline
+      Selection sort & average & 31.952 & 28.763 & 78.141 & 3076.058 & 2919.573 & 6356.757 & 304358.199 & 299735.004 & 348658.299 \\
+       & stdev & 0.313 & 0.683 & 5.256 & 73.065 & 18.222 & 72.375 & 3739.845 & 1006.628 & 4387.375 \\
+    \end{tabular}
+    }
+  \end{center}
+\end{table}
+
+\section{Discussion}
+
+On the unsorted data, quicksort consistently performed the best.  Its average time increased by roughly 10-fold for each 10-fold increase in input, a roughly linear increase which can be expected on a linearithmic algorithm---$n\log n$ approaches a line as its second derivative approaches zero.  However, quicksort's efficiency appears to degenerate to $\Theta(n^2)$ on sorted and reverse-sorted data; although the algorithm runs in $\Theta(n \log n)$ on large files, there is still a heavy load of sorting the smaller subarrays (below $n=101$).  Reverse-sorted data was processed slightly faster than already-sorted data, as fewer comparisons are made on reversed data in the innermost loop when $n$ drops below 101 (the first item is always greater than or equal to the rest of the items).  
+
+Mergesort took roughly twice as long as quicksort on unsorted data and also showed much greater variability, but it still maintained some consistency on the sorted and reverse sorted data.  Mergesort took less than half the time (on average) on sorted and reversed data than it did on the unsorted data, and it outperformed quicksort on these tests.  The standard deviation also was tighter on sorted and reversed files than on unsorted.  Interestingly, both quicksort and mergesort handled reverse-sorted data better than already-sorted data.  
+
+Selection sort was the slowest in every instance.  Consistent with $\Theta(n^2)$ time, on a 10-fold increase in input size, the algorithm took roughly 100 times as long to complete the unsorted and sorted data, performing slightly better on sorted data.  It performed the worst in the reverse-sorted case, but interestingly the time taken didn't grow so dramatically on each step in file size.  The medium reverse file took about 80 times as long as the small, and the large took only about 50 ties as long as the medium.  I believe this is because when selection sort identifies the smallest unsorted value in the data, it coincidentally swaps it with the largest unsorted value, and both are placed in the right position.  Once half of the data are sorted, all of them are sorted.  
+
+\end{document}
